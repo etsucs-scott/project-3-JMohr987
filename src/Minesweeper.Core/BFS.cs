@@ -2,8 +2,8 @@ namespace Minesweeper.Core;
 
 public static class BFS
 {
-    public static int []yDirection = { -1, 0, 1, 0};
-    public static int []xDirection = { 0, 1, 0, -1};
+    public static int []yDirection = { -1, 0, 1, 0, -1, -1, 1, 1};
+    public static int []xDirection = { 0, 1, 0, -1, -1, 1, -1, 1};
 
     public static bool IsValid(bool [,]visited, Pair pair, int Row, int Col)
     {

@@ -63,6 +63,7 @@ public class Board
         bool looped = false;
         GetMineCount();
 
+
         while (true)
         {
             for (int i = 0; i < Size; i++)
@@ -99,26 +100,70 @@ public class Board
 
     public void PlaceFlag(Pair pair)
     {
-        if (PlayerBoard[pair.Y, pair.X] != TileType.Hidden)
+        if ((PlayerBoard[pair.Y, pair.X] != TileType.Hidden) && (PlayerBoard[pair.Y, pair.X] != TileType.Flag))
         {
             return;
         }
-        PlayerBoard[pair.Y, pair.X] = TileType.Flag;
+
+        if ((PlayerBoard[pair.Y, pair.X] == TileType.Hidden))
+        {
+            PlayerBoard[pair.Y, pair.X] = TileType.Flag;
+        }
+        else
+        {
+            PlayerBoard[pair.Y, pair.X] = TileType.Hidden;
+        }
     }
 
-    public void RevealTile(Pair pair)
+    public bool EmptyTileCheck()
+    {
+        for (int i = 0; i < Size; i++)
+        {
+            for (int k = 0; k < Size; k++)
+            {
+                if ((GameBoard[i, k] == TileType.Empty) && ((PlayerBoard[i, k] == TileType.Hidden) || (PlayerBoard[i, k] == TileType.Flag)))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public bool RevealTile(Pair pair)
     {
         if (PlayerBoard[pair.Y, pair.X] == TileType.Flag)
         {
-            return;
+            return true;
         }
-
-        if (GameBoard[pair.Y, pair.X] == TileType.Empty)
+        else if (GameBoard[pair.Y, pair.X] == TileType.Empty)
         {
-            MineSearch(pair);
+            AdjMineSearch(pair);
+            if (EmptyTileCheck())
+            {
+                return false;
+            }else{
+                return true;
+            }
         }
+        else if (GameBoard[pair.Y, pair.X] == TileType.Mine)
+        {
+            PlayerBoard[pair.Y, pair.X] = GameBoard[pair.Y, pair.X];
+            AllMineSearch();
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
-        PlayerBoard[pair.Y, pair.X] = GameBoard[pair.Y, pair.X];
+    public void RevealMine(Pair pair)
+    {
+        if (GameBoard[pair.Y, pair.X] == TileType.Mine)
+        {
+            PlayerBoard[pair.Y, pair.X] = TileType.Mine;
+        }
     }
 
     public void PeekTile(Pair pair)
@@ -130,7 +175,13 @@ public class Board
         //PlayerBoard[pair.Y, pair.X] = GameBoard[pair.Y, pair.X];
     }
 
-    public void MineSearch(Pair pair)
+    public void AllMineSearch()
+    {
+        bool[,] visited = new bool[Size, Size];
+
+        BFS.Search(GameBoard, visited, new Pair(0, 0), Size, Size, RevealMine);
+    }
+    public void AdjMineSearch(Pair pair)
     {
 
         checkPairs = new Queue<Pair>();
@@ -156,7 +207,7 @@ public class Board
             else if (MinesRevealed == 0)
             {
                 PlayerBoard[node.Y, node.X] = GameBoard[node.Y, node.X];
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     Pair newPair = new Pair(
                             node.X + BFS.xDirection[i], 
@@ -209,13 +260,21 @@ public class Board
 
     public string PrintBoard()
     {
-        string returnString = "";
+        string returnString = "  ";
 
         for (int i = 0; i < Size; i++)
         {
+            returnString += $"{i} ";
+        }
+        returnString += "\n";
+
+        for (int i = 0; i < Size; i++)
+        {
+            returnString += $"{i} ";
             for (int k = 0; k < Size; k++)
             {
                 returnString += GetCharacter(i, k, PlayerBoard);
+                returnString += " ";
             }
             returnString += "\n";
         }

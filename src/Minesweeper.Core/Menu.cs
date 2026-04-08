@@ -17,9 +17,9 @@ public static class Menu
     public static string PrintCommandMenu()
     {
         string returnString = "";
-        returnString += "1) Reveal\n";
-        returnString += "2) Flag\n";
-        returnString += "3) Quit\n";
+        returnString += "r row col\n";
+        returnString += "f row col\n";
+        returnString += "q\n";
 
         return returnString;
     }
@@ -50,30 +50,51 @@ public static class Menu
         }
     }
 
-    public static bool PlayerCommand(string input, out Command cmd)
+    public static bool PlayerCommand(string str, int size, out Command cmd, out Pair pair)
     {
-        int selection;
-        if (!Validation.ValidIntRange(input, out selection, min, max))
+        string[] inputs = str.Split(' ');
+        int row;
+        int col;
+        if ((inputs.Length != 3) && (inputs.Length != 1))
         {
             cmd = Command.Quit;
+            pair = new Pair(0, 0);
             return false;
         }
 
-        switch (selection)
+        switch (inputs[0].ToLower())
         {
-            case 1:
-                cmd = Command.Reveal;
-                return true;
-            case 2:
-                cmd = Command.Flag;
-                return true;
-            case 3:
+            case "q":
                 cmd = Command.Quit;
+                pair = new Pair(0, 0);
                 return true;
+            case "r":
+                cmd = Command.Reveal;
+                break;
+            case "f":
+                cmd = Command.Flag;
+                break;
             default:
                 cmd = Command.Quit;
+                pair = new Pair(0, 0);
                 return false;
         }
+
+        if (!Validation.ValidIntRange(inputs[1], out row, 0, size - 1))
+        {
+            cmd = Command.Quit;
+            pair = new Pair(0, 0);
+            return false;
+        }
+        if (!Validation.ValidIntRange(inputs[2], out col, 0, size - 1))
+        {
+            cmd = Command.Quit;
+            pair = new Pair(0, 0);
+            return false;
+        }
+
+        pair = new Pair(col, row);
+
+        return true;
     }
-    
 }
