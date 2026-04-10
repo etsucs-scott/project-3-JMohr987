@@ -7,7 +7,6 @@ public class Gameplay
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
 
-    public TimeSpan TotalTime { get; private set; }
     public int Seconds { get; private set; }
     public int MoveCount { get; private set; }
     public int Size { get; private set; }
@@ -41,20 +40,21 @@ public class Gameplay
         }
     }
 
-    public string EndGame()
+    public string EndGame(out bool win)
     {
         string returnString = "";
 
         if (!(MineField.EmptyTileCheck()))
         {
             returnString += "You lost...\n";
+			win = false;
             return returnString;
         }
+			win = true;
             returnString += "You win!\n";
 
         EndTime = DateTime.Now;
-        TotalTime = EndTime - StartTime;
-        Seconds = TotalTime.Seconds;
+        Seconds = (EndTime - StartTime).Seconds;
 
         returnString += $"Total Time: {Seconds}\n";
         returnString += $"Total Moves: {MoveCount}\n";

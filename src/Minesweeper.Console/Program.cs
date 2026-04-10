@@ -4,9 +4,8 @@ string input;
 Minesweeper.Core.Command cmd;
 Minesweeper.Core.Pair pair;
 
-Minesweeper.Core.FileManip file = new Minesweeper.Core.FileManip();
-
-file.OpenFile();
+DateTime date1 = new DateTime(2010, 1, 1, 8, 0, 15);
+DateTime date2 = new DateTime(2010, 8, 18, 13, 30, 30);
 
 while (true)
 {
@@ -38,6 +37,14 @@ b.GenerateBoard();
 
 Minesweeper.Core.Gameplay g = new Minesweeper.Core.Gameplay(b);
 
+Minesweeper.Core.Scores scores = new Minesweeper.Core.Scores();
+
+Console.WriteLine(scores.OpenFile());
+
+if(!scores.Opened)
+{
+	return;
+}
 
 Console.Write(b.PrintBoard());
 while (g.Running){
@@ -63,4 +70,36 @@ while (g.Running){
     Console.Write(b.PrintBoard());
 }
 
-Console.Write(g.EndGame());
+Console.Write(g.EndGame(out bool win));
+
+if (!win)
+{
+	return;
+}
+
+if (scores.SaveScore(g))
+{
+	Console.WriteLine("New Score on Leaderboard!");
+	Console.WriteLine(":)");
+}
+else
+{
+	Console.WriteLine("Did not make a top 5");
+	Console.WriteLine(":(");
+}
+
+Console.WriteLine("High Scores");
+foreach (string s in scores.Scores8)
+{
+	Console.WriteLine(s);
+}
+foreach (string s in scores.Scores12)
+{
+	Console.WriteLine(s);
+}
+foreach (string s in scores.Scores16)
+{
+	Console.WriteLine(s);
+}
+
+scores.SaveFile();
