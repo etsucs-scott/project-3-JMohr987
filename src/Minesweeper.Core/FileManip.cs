@@ -2,16 +2,21 @@ namespace Minesweeper.Core;
 
 public class Scores
 {
+	//Holds scores for all three sizes
+	//Lists incase the file has more than 5 scores
     public List<string> Scores8 { get; private set; }
     public List<string> Scores12 { get; private set; }
     public List<string> Scores16 { get; private set; }
 
+	//Seprate dir and file consts for so I can merge them later
+	//So it works on all OS
     private const string dataDir = "data";
     private const string dataFile = "HighScores.csv";
-	private const int MaxNumber = 5;
-
     private string path;
 
+	private const int MaxNumber = 5;
+
+	//For checking if file has been opened
 	public bool Opened { get; private set; }
 
     public Scores() {
@@ -22,6 +27,8 @@ public class Scores
 		Opened = false;
 	}
 
+	//Checks for a valid score in proper format
+	//Also makes sure it has proper board size
     public bool ValidScore(string line)
     {
         string[] elements = line.Split(',');
@@ -62,7 +69,13 @@ public class Scores
 
     }
 
-    public bool AddScore(List<string>scoreList, string line)
+	//Adds score to the list of scores
+	//Makes adds one by one so the list will never get above 6
+	//Have remove goto to keep DRY and because I think that's too
+	//Little code to make it's own method
+	//Sorts the scores as well
+	//Takes in scoreList as an arg so It knows which of the three to use
+    public bool AddScore(List<string> scoreList, string line)
     {
         string[] temp = line.Split(',');
         int lineTime = int.Parse(temp[1]);
@@ -112,6 +125,7 @@ public class Scores
 
     }
 
+	//Gets the list to use
 	public bool GetSize(string line)
 	{
 		if (line[0] == '8')
@@ -130,6 +144,9 @@ public class Scores
 		return false;
 
 	}
+
+	//Handles errors with files and opends it
+	//Adds the top 5 scores of the file to the list
     public string OpenFile()
     {
 		string returnString = "";
@@ -169,6 +186,7 @@ public class Scores
 		return returnString;
 	}
 
+	//Save the scores in csv format
 	public bool SaveScore(Gameplay game)
 	{
 		string scoreLine = "";
@@ -187,6 +205,7 @@ public class Scores
 
 
 
+	//Puts the scores from the lists into the file and saves it
 	public string SaveFile()
 	{
 		List<string> allScores = new List<string>(Scores8);

@@ -4,9 +4,6 @@ string input;
 Minesweeper.Core.Command cmd;
 Minesweeper.Core.Pair pair;
 
-DateTime date1 = new DateTime(2010, 1, 1, 8, 0, 15);
-DateTime date2 = new DateTime(2010, 8, 18, 13, 30, 30);
-
 while (true)
 {
     Console.Write(Minesweeper.Core.Menu.PrintBoardMenu());
@@ -67,6 +64,7 @@ while (g.Running){
     }
 
     g.OptionSelect(cmd, pair);
+	Console.Clear();
     Console.Write(b.PrintBoard());
 }
 

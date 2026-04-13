@@ -1,5 +1,7 @@
 namespace Minesweeper.Core;
 
+//Simple class to hold coordinates
+//Easier than passing in row and col for each method
 public class Pair
 {
     public int X { get; private set; }

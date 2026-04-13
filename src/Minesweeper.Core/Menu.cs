@@ -2,9 +2,11 @@ namespace Minesweeper.Core;
 
 public static class Menu
 {
+	//Max and min ranges for menus for validation stuff
     private static readonly int min = 1;
     private static readonly int max = 3;
 
+	//Menu for board sizes
     public static string PrintBoardMenu()
     {
         string returnString = "";
@@ -14,6 +16,8 @@ public static class Menu
 
         return returnString;
     }
+	
+	//Menu for options
     public static string PrintCommandMenu()
     {
         string returnString = "";
@@ -24,6 +28,7 @@ public static class Menu
         return returnString;
     }
 
+	//Menu logic to handle input for board size
     public static bool BoardSize(string input, out int size)
     {
         int selection;
@@ -50,6 +55,9 @@ public static class Menu
         }
     }
 
+	//Takes in input for revealing, flagging, and quitting
+	//Assigns (0,0) and Quit for errors so no null  values
+	//Boolean so the program can tell when the player enters a valid command
     public static bool PlayerCommand(string str, int size, out Command cmd, out Pair pair)
     {
         string[] inputs = str.Split(' ');

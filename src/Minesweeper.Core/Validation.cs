@@ -2,6 +2,8 @@ namespace Minesweeper.Core;
 
 public static class Validation
 {
+	//Makes sure an integer entered is within a range
+	//returns true on success
     public static bool ValidIntRange(string input, out int num, int min, int max)
     {
         if (!int.TryParse(input, out num))
@@ -17,6 +19,7 @@ public static class Validation
         return true;
     }
 
+	//Makes sure the seed is a valid int
     public static bool ValidSeed(string input, out int seed)
     {
         if (input == "")
@@ -34,6 +37,7 @@ public static class Validation
     }
 
 
+	//Makes sure a pair is within the board size
     public static bool ValidPair(string str, int size, out Pair pair)
     {
         string[] input = str.Split(' ');

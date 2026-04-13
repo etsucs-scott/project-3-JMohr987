@@ -4,6 +4,10 @@
 dotnet build
 dotnet run --project src/Minesweeper.Console
 ```
+## Tests
+```bash
+dotnet test
+```
 
 ## Rules
 Classic Minesweeper rules!
@@ -16,6 +20,7 @@ This will prevent accidentally hitting the mines
 ## How To Play
 First choose the size (8x8, 12x12, or 16x16)
 Enter a seed (Or nothing for a seed based off current time)
+Seed Predetermines the mine placement
 To reveal a tile: r row col
 To flag a tile: f row col
 To quit: q

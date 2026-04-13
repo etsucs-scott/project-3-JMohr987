@@ -2,16 +2,21 @@ namespace Minesweeper.Core;
 
 public class Gameplay
 {
+	//Has a reference to the main board so it can get seed and size
+	//Also allows this class to check if the player has won
     public Board MineField { get; private set; }
 
+	//To keep track of seconds and timestamp
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
 
+	//All parts of the score save to the file (Aside from timestamp)
     public int Seconds { get; private set; }
     public int MoveCount { get; private set; }
     public int Size { get; private set; }
     public int Seed { get; private set; }
 
+	//So it knows when to stop
     public bool Running  {get; private set; }
 
     public Gameplay(Board b)
@@ -23,6 +28,8 @@ public class Gameplay
         Running = true;
     }
 
+	//Does the proper method for the option.
+	//Also increments the movecount
     public void OptionSelect(Command cmd, Pair pr)
     {
         switch (cmd)
@@ -40,6 +47,7 @@ public class Gameplay
         }
     }
 
+	//Handles game ending stuff
     public string EndGame(out bool win)
     {
         string returnString = "";
@@ -58,8 +66,7 @@ public class Gameplay
 
         returnString += $"Total Time: {Seconds}\n";
         returnString += $"Total Moves: {MoveCount}\n";
-        
+
         return returnString;
-        
     }
 }
